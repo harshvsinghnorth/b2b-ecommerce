@@ -1,0 +1,44 @@
+version: '3.8'
+services:
+  # The Relational Database (Orders)
+  postgres:
+    image: postgres:15
+    container_name: buyogo-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: buyogo_orders
+    ports:
+      - "5432:5432"
+
+  # The Document Database (Products)
+  mongodb:
+    image: mongo:latest
+    container_name: buyogo-mongodb
+    ports:
+      - "27017:27017"
+
+  # The Speed Layer (Cache)
+  redis:
+    image: redis:latest
+    container_name: buyogo-redis
+    ports:
+      - "6379:6379"
+
+  # The Message Broker (Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
