@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: buyogo_orders
+      POSTGRES_DB: buyogo_platform
     ports:
       - "5432:5432"
 
